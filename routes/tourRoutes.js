@@ -6,6 +6,13 @@ const router = express.Router();
 //router.param('id', tourController.checkID);
 
 router
+  .route('/top-3-cheap')
+  .get(tourController.aliasTopTours, tourController.getAllTours);
+
+router.route('/tour-stats').get(tourController.getTourStats);
+router.route('/monthly-plan/:year').get(tourController.monthlyPlan);
+
+router
   .route('/')
   .get(tourController.getAllTours)
   // .post(tourController.checkBody, tourController.createTour);
