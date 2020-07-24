@@ -8,8 +8,10 @@ const hpp = require('hpp');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
+const reviewRoutes = require('./routes/reviewRoutes');
 const tourRoutes = require('./routes/tourRoutes');
-const userRouter = require('./routes/userRoutes');
+const userRoutes = require('./routes/userRoutes');
+
 require('dotenv').config();
 
 const app = express();
@@ -57,8 +59,9 @@ app.use((req, res, next) => {
 });
 
 //ROUTES
-app.use('/api/v1/users', userRouter);
+app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/tours', tourRoutes);
+app.use('/api/v1/reviews', reviewRoutes);
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });

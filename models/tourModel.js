@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+// const user = require('./userModel');
 // const validator = require('validator');
 
 const tourSchema = new mongoose.Schema(
@@ -83,6 +84,36 @@ const tourSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    startLocation: {
+      // GeoJSON
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point'],
+      },
+      coordinates: [Number],
+      address: String,
+      description: String,
+    },
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point'],
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number,
+      },
+    ],
+    guides: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },
@@ -95,7 +126,7 @@ tourSchema.virtual('durationWeeks').get(function () {
 });
 
 //DOCUMENT MIDDLEWARE: runs before save() and create() not trigger with insertMany()
-tourSchema.pre('save', function () {
+tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   console.log('Will slug the document');
   next();
@@ -119,6 +150,14 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt',
+  });
+  next();
+});
+
 tourSchema.post(/^find/, function (docs, next) {
   console.log(`Query took ${Date.now() - this.start} milliseconds`);
   next();
@@ -130,6 +169,13 @@ tourSchema.pre('aggregate', function (next) {
   console.log(this.pipeline());
   next();
 });
+
+//Child embeding
+// tourSchema.pre('save', async function (next) {
+//   const guidesPromises = this.guides.map(async (id) => user.findById(id));
+//   this.guides = await Promise.all(guidesPromises);
+//   next();
+// });
 
 const Tour = mongoose.model('Tour', tourSchema);
 
