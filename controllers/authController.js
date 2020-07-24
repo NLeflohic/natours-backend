@@ -99,7 +99,6 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-  console.log(decoded);
   //check if user still exists
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
@@ -122,7 +121,6 @@ exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     //roles is an array ['admin', 'lead-guide']
     //req.user.role comes from prec middleware protect (req.user = currentUser)
-    console.log(req.user.role);
     if (!roles.includes(req.user.role)) {
       return next(
         new AppError('You do not have the permission perform this action', 403)
@@ -214,7 +212,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // get user from collection
   const user = await User.findById(req.user.id).select('+password');
-  console.log(user);
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
     return next(new AppError('User not found in the database', 404));
   }
