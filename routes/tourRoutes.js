@@ -1,6 +1,7 @@
 const express = require('express');
 const tourController = require('../controllers/tourController');
 const authController = require('../controllers/authController');
+const reviewRouter = require('./reviewRoutes');
 
 const router = express.Router();
 
@@ -28,5 +29,19 @@ router
     authController.restrictTo('admin', 'lead-guide'),
     tourController.deleteTour
   );
+
+//POST /tour/324j43/reviews
+//GET /tour/324j43/reviews
+//GET /tour/324j43/reviews/33jl4
+
+//nested route
+// router
+//   .route('/:tourId/reviews')
+//   .post(
+//     authController.protect,
+//     authController.restrictTo('user'),
+//     reviewController.createReview
+//   );
+router.use('/:tourId/reviews', reviewRouter);
 
 module.exports = router;

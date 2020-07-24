@@ -8,10 +8,11 @@ class ApiFeatures {
 
   filter() {
     const queryObj = { ...this.queryString };
-    //const excludedFields = ['page', 'sort', 'limit', 'fields'];
-    //excludedFields.forEach((el) => delete queryObj[el]);
+    // const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    // excludedFields.forEach((el) => delete queryObj[el]);
 
     const includedFields = Object.getOwnPropertyNames(Tour.schema.paths);
+    console.log(includedFields);
     const queryFields = Object.getOwnPropertyNames(this.queryString);
     const fields = includedFields.filter((el) => {
       return queryFields.indexOf(el) >= 0;
