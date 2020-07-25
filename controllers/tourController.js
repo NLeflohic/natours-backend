@@ -36,7 +36,7 @@ exports.aliasTopTours = (req, res, next) => {
   next();
 };
 
-exports.getAllTours = factory.getAll(Tour, { path: 'reviews' });
+exports.getAllTours = factory.getAll(Tour);
 // exports.getAllTours = catchAsync(async (req, res, next) => {
 //   //request example
 //   //?difficulty=easy&sort=1&page=4&duration[gte]=5&price[lte]=1800

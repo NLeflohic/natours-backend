@@ -49,7 +49,6 @@ exports.getOne = (Model, populateOptions) =>
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     let query = Model.findById(id);
-    console.log(req.params.id);
     if (populateOptions) query = query.populate(populateOptions);
     const doc = await query;
 
