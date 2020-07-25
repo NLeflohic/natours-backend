@@ -21,6 +21,14 @@ router
   );
 
 router
+  .route('/tours-within/:distance/center/:latlng/unit/:unit')
+  .get(tourController.getTourWithin);
+//tours-within?distance=233&center=-40,45&uit=mi
+//tours-within/233/center/-40,45/unit/mi
+
+router.route('/distances/:latlng/units/:unit').get(tourController.getDistances);
+
+router
   .route('/')
   //protect the route with middleware for the example
   .get(tourController.getAllTours)
