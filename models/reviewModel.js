@@ -64,17 +64,20 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
     },
   ]);
 
-  let rating = 0;
+  let rating = 4.5;
   let nbRating = 0;
   if (stats.length > 0) {
     rating = stats[0].avgRatings;
     nbRating = stats[0].nbRatings;
   }
+  console.log(stats);
   await Tour.findByIdAndUpdate(tourId, {
     ratingsAverage: rating,
     ratingsQuantity: nbRating,
   });
 };
+
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 
 reviewSchema.post('save', function () {
   //this point to current review
