@@ -36,39 +36,41 @@ exports.aliasTopTours = (req, res, next) => {
   next();
 };
 
-exports.getAllTours = catchAsync(async (req, res, next) => {
-  //request example
-  //?difficulty=easy&sort=1&page=4&duration[gte]=5&price[lte]=1800
-  const features = new ApiFeatures(Tour.find().populate('reviews'), req.query)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate();
-  const tours = await features.query;
+exports.getAllTours = factory.getAll(Tour, { path: 'reviews' });
+// exports.getAllTours = catchAsync(async (req, res, next) => {
+//   //request example
+//   //?difficulty=easy&sort=1&page=4&duration[gte]=5&price[lte]=1800
+//   const features = new ApiFeatures(Tour.find().populate('reviews'), req.query)
+//     .filter()
+//     .sort()
+//     .limitFields()
+//     .paginate();
+//   const tours = await features.query;
 
-  res.status(200).json({
-    status: 'Success',
-    results: tours.length,
-    data: {
-      tours,
-    },
-  });
-});
+//   res.status(200).json({
+//     status: 'Success',
+//     results: tours.length,
+//     data: {
+//       tours,
+//     },
+//   });
+// });
 
-exports.getTour = catchAsync(async (req, res, next) => {
-  const { id } = req.params;
-  const tour = await Tour.findById(id).populate('reviews');
-  console.log(tour);
-  if (!tour) {
-    return next(new AppError('No tour found with this id', 404));
-  }
-  res.status(200).json({
-    status: 'Success',
-    data: {
-      tour,
-    },
-  });
-});
+exports.getTour = factory.getOne(Tour, { path: 'reviews' });
+// exports.getTour = catchAsync(async (req, res, next) => {
+//   const { id } = req.params;
+//   const tour = await Tour.findById(id).populate('reviews');
+//   console.log(tour);
+//   if (!tour) {
+//     return next(new AppError('No tour found with this id', 404));
+//   }
+//   res.status(200).json({
+//     status: 'Success',
+//     data: {
+//       tour,
+//     },
+//   });
+// });
 
 exports.createTour = factory.createOne(Tour);
 // exports.createTour = catchAsync(async (req, res, next) => {

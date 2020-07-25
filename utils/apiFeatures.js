@@ -1,9 +1,10 @@
 const Tour = require('../models/tourModel');
 
 class ApiFeatures {
-  constructor(query, queryString) {
+  constructor(Model, query, queryString) {
     this.query = query;
     this.queryString = queryString;
+    this.Model = Model;
   }
 
   filter() {
@@ -11,8 +12,7 @@ class ApiFeatures {
     // const excludedFields = ['page', 'sort', 'limit', 'fields'];
     // excludedFields.forEach((el) => delete queryObj[el]);
 
-    const includedFields = Object.getOwnPropertyNames(Tour.schema.paths);
-    console.log(includedFields);
+    const includedFields = Object.getOwnPropertyNames(this.Model.schema.paths);
     const queryFields = Object.getOwnPropertyNames(this.queryString);
     const fields = includedFields.filter((el) => {
       return queryFields.indexOf(el) >= 0;

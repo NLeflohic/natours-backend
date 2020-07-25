@@ -20,30 +20,32 @@ exports.setTourUserIds = (req, res, next) => {
 //   });
 // });
 
-exports.getReviews = catchAsync(async (req, res, next) => {
-  let filter;
-  if (req.params.tourId) filter = { tour: req.params.tourId };
+exports.getReviews = factory.getAll(Review);
+// exports.getReviews = catchAsync(async (req, res, next) => {
+//   let filter;
+//   if (req.params.tourId) filter = { tour: req.params.tourId };
 
-  const reviews = await Review.find(filter);
-  res.status(200).json({
-    status: 'Success',
-    results: reviews.length,
-    data: reviews,
-  });
-});
+//   const reviews = await Review.find(filter);
+//   res.status(200).json({
+//     status: 'Success',
+//     results: reviews.length,
+//     data: reviews,
+//   });
+// });
 
-exports.getReview = catchAsync(async (req, res, next) => {
-  const review = await Review.findById(req.params.id);
-  if (!review) {
-    return next(AppError('This review cannot be found', 404));
-  }
-  res.status(200).json({
-    status: 'Success',
-    data: {
-      review,
-    },
-  });
-});
+exports.getReview = factory.getOne(Review);
+// exports.getReview = catchAsync(async (req, res, next) => {
+//   const review = await Review.findById(req.params.id);
+//   if (!review) {
+//     return next(AppError('This review cannot be found', 404));
+//   }
+//   res.status(200).json({
+//     status: 'Success',
+//     data: {
+//       review,
+//     },
+//   });
+// });
 
 exports.createReview = factory.createOne(Review);
 exports.updateReview = factory.updateOne(Review);
