@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -11,10 +12,14 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRoutes = require('./routes/tourRoutes');
 const userRoutes = require('./routes/userRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const viewRouter = require('./routes/viewRoutes');
 
 require('dotenv').config();
 
 const app = express();
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 
 //GLOBALS MIDDLEWARES
 //Set security HTTP Headers
@@ -50,7 +55,8 @@ app.use(
 );
 
 //serving local file
-app.use(express.static(`${__dirname}/public`));
+//app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, 'public')));
 
 //test middleware
 app.use((req, res, next) => {
@@ -59,6 +65,7 @@ app.use((req, res, next) => {
 });
 
 //ROUTES
+app.use('/', viewRouter);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
