@@ -41,6 +41,7 @@ app.use('/api', limiter);
 
 //Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
 //Data sanitization against NoSQL injection
@@ -61,10 +62,10 @@ app.use(
 app.use(express.static(path.join(__dirname, 'public')));
 
 //test middleware
-app.use((req, res, next) => {
-  console.log('req:', req.cookies);
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log('req:', req.cookies);
+//   next();
+// });
 
 //ROUTES
 app.use('/', viewRouter);

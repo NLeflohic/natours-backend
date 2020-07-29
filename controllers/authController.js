@@ -36,7 +36,6 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.logout = (req, res, next) => {
-  console.log('lougout server');
   res.cookie('jwt', 'loggedout', {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
@@ -133,7 +132,6 @@ exports.isLoggedIn = async (req, res, next) => {
   if (req.cookies.jwt) {
     try {
       const token = req.cookies.jwt;
-
       //verification token
       const decoded = await promisify(jwt.verify)(
         token,
@@ -144,7 +142,6 @@ exports.isLoggedIn = async (req, res, next) => {
       if (!currentUser) {
         return next();
       }
-
       //check if user change password after the jwt was issued
       if (currentUser.changePasswordAfter(decoded.iat)) {
         return next();
@@ -255,7 +252,10 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // get user from collection
+  console.log(req.body);
   const user = await User.findById(req.user.id).select('+password');
+
+  console.log(user, req.body.passwordCurrent);
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
     return next(new AppError('User not found in the database', 404));
   }
@@ -263,6 +263,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
 
+  console.log(user);
   //update password
   await user.save();
 
