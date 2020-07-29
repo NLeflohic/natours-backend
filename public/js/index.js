@@ -9,7 +9,7 @@ import displayMap from './mapbox';
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
 const logoutBtn = document.querySelector('.nav__--logout');
-const userForm = document.querySelector('.form-user-data');
+const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
 
 if (mapBox) {
@@ -32,12 +32,16 @@ if (logoutBtn) {
   logoutBtn.addEventListener('click', logout);
 }
 
-if (userForm) {
-  userForm.addEventListener('submit', (e) => {
+if (userDataForm) {
+  userDataForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    updateUserSettings({ name, email }, 'data');
+    const form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
+    // const name = document.getElementById('name').value;
+    // const email = document.getElementById('email').value;
+    updateUserSettings(form, 'data');
   });
 }
 

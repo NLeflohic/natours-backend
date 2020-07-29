@@ -21,11 +21,9 @@ export const login = async (email, password) => {
 };
 
 export const logout = async () => {
-  console.log('click');
   try {
     location.assign('/');
     const res = await axios.get('http://localhost:3000/api/v1/users/signout');
-    console.log('res:', res);
     if (res.data.status === 'Success') {
       if (location.pathname === '/me') location.assign('/login');
       else location.reload(true);

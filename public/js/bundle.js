@@ -8440,34 +8440,32 @@ var logout = /*#__PURE__*/function () {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            console.log('click');
-            _context2.prev = 1;
+            _context2.prev = 0;
             location.assign('/');
-            _context2.next = 5;
+            _context2.next = 4;
             return _axios.default.get('http://localhost:3000/api/v1/users/signout');
 
-          case 5:
+          case 4:
             res = _context2.sent;
-            console.log('res:', res);
 
             if (res.data.status === 'Success') {
               if (location.pathname === '/me') location.assign('/login');else location.reload(true);
             }
 
-            _context2.next = 13;
+            _context2.next = 11;
             break;
 
-          case 10:
-            _context2.prev = 10;
-            _context2.t0 = _context2["catch"](1);
+          case 8:
+            _context2.prev = 8;
+            _context2.t0 = _context2["catch"](0);
             (0, _alert.showAlert)('error', 'Error logging out, try again');
 
-          case 13:
+          case 11:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[1, 10]]);
+    }, _callee2, null, [[0, 8]]);
   }));
 
   return function logout() {
@@ -8502,14 +8500,14 @@ var updateUserSettings = /*#__PURE__*/function () {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log(data);
+            console.log(data.email, data.photo);
             url = type === 'password' ? 'http://localhost:3000/api/v1/users/updateMyPassword' : 'http://localhost:3000/api/v1/users/updateMe';
             _context.prev = 2;
             _context.next = 5;
-            return _axios.default.patch(url, {
-              password: data.password,
-              passwordCurrent: data.passwordCurrent,
-              passwordConfirm: data.passwordConfirm
+            return _axios.default.patch(url, data, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
             });
 
           case 5:
@@ -8868,7 +8866,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 var mapBox = document.getElementById('map');
 var loginForm = document.querySelector('.form--login');
 var logoutBtn = document.querySelector('.nav__--logout');
-var userForm = document.querySelector('.form-user-data');
+var userDataForm = document.querySelector('.form-user-data');
 var userPasswordForm = document.querySelector('.form-user-password');
 
 if (mapBox) {
@@ -8889,15 +8887,16 @@ if (logoutBtn) {
   logoutBtn.addEventListener('click', _login.logout);
 }
 
-if (userForm) {
-  userForm.addEventListener('submit', function (e) {
+if (userDataForm) {
+  userDataForm.addEventListener('submit', function (e) {
     e.preventDefault();
-    var name = document.getElementById('name').value;
-    var email = document.getElementById('email').value;
-    (0, _updateSettings.updateUserSettings)({
-      name: name,
-      email: email
-    }, 'data');
+    var form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]); // const name = document.getElementById('name').value;
+    // const email = document.getElementById('email').value;
+
+    (0, _updateSettings.updateUserSettings)(form, 'data');
   });
 }
 
