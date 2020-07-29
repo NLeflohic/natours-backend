@@ -7,13 +7,22 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.name.split(' ')[0];
     this.url = url;
-    this.from = `Nicolas Le Flohic <${process.env.EMAIL_FROM}>`;
+    this.from = 'leflohic.nicolas@gmail.com'; //`Nicolas Le Flohic <${process.env.EMAIL_FROM}>`;
   }
 
   newTransport() {
-    if (process.env.NODE_ENV === 'prod') {
+    if (process.env.NODE_ENV === 'production') {
       //sendgrid
-      return 1;
+      console.log('send prod');
+      return nodemailer.createTransport({
+        service: 'SendGrid',
+        host: 'smtp.sendgrid.net',
+        port: 587,
+        auth: {
+          user: process.env.SENDGRID_USERNAME,
+          pass: process.env.SENDGRID_PASSWORD,
+        },
+      });
     }
 
     return nodemailer.createTransport({
@@ -30,7 +39,7 @@ module.exports = class Email {
   async send(template, subject) {
     //render the html base on a pug template
     const html = pug.renderFile(
-      `${__dirname}/../views/emails/${template.pug}`,
+      `${__dirname}/../views/emails/${template}.pug`,
       {
         firstName: this.firstName,
         url: this.url,
@@ -54,6 +63,11 @@ module.exports = class Email {
   async sendWelcome() {
     await this.send('welcome', 'Welcome to the natours familly!');
   }
-};
 
-module.exports = sendEmail;
+  async sendPasswordReset() {
+    await this.send(
+      'passwordReset',
+      'Your passwor reset token (Valid only for 10 mimutes)'
+    );
+  }
+};
