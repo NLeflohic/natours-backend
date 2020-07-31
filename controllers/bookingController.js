@@ -25,7 +25,7 @@ exports.getCheckOutSession = catchAsync(async (req, res, next) => {
       {
         name: `${tour.name} Tour`,
         description: `${tour.summary}`,
-        //images: [`https://site natours/img/tours/${tour.imageCover}`],
+        images: [`${req.protocol}://${urlLocal}/img/tours/${tour.imageCover}`],
         amount: tour.price * 100,
         currency: 'usd',
         quantity: 1,
