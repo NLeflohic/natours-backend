@@ -52,11 +52,8 @@ exports.getAccount = (req, res) => {
 exports.getMyTours = catchAsync(async (req, res) => {
   //Could be made with virtual populate
   const bookings = await Booking.find({ user: req.user.id });
-  console.log(bookings);
   const tourIDs = bookings.map((el) => el.tour.id);
-  console.log(tourIDs);
   const tours = await Tour.find({ _id: { $in: tourIDs } });
-  console.log(tours);
   res.status(200).render('overview', {
     title: 'My tours',
     tours,

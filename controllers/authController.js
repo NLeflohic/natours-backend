@@ -58,7 +58,6 @@ exports.signup = catchAsync(async (req, res, next) => {
   );
   const reqUrl = swapToLocalhost(req.get('host'));
   const url = `${req.protocol}://${reqUrl}/me`;
-  console.log(url);
 
   await new Email(newUser, url).sendWelcome();
 
@@ -261,7 +260,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // get user from collection
-  console.log(req.body);
   const user = await User.findById(req.user.id).select('+password');
 
   console.log(user, req.body.passwordCurrent);
@@ -272,7 +270,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
 
-  console.log(user);
   //update password
   await user.save();
 

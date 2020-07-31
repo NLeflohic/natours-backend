@@ -4,11 +4,10 @@ import { showAlert } from './alert';
 
 //type is password or data
 export const updateUserSettings = async (data, type) => {
-  console.log(data.email, data.photo);
   const url =
     type === 'password'
-      ? 'http://localhost:3000/api/v1/users/updateMyPassword'
-      : 'http://localhost:3000/api/v1/users/updateMe';
+      ? '/api/v1/users/updateMyPassword'
+      : '/api/v1/users/updateMe';
   try {
     const res = await axios.patch(url, data, {
       headers: {

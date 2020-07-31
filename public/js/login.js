@@ -4,7 +4,7 @@ import { showAlert } from './alert';
 
 export const login = async (email, password) => {
   try {
-    const res = await axios.post('http://localhost:3000/api/v1/users/signin', {
+    const res = await axios.post('/api/v1/users/signin', {
       email,
       password,
     });
@@ -23,7 +23,7 @@ export const login = async (email, password) => {
 export const logout = async () => {
   try {
     location.assign('/');
-    const res = await axios.get('http://localhost:3000/api/v1/users/signout');
+    const res = await axios.get('/api/v1/users/signout');
     if (res.data.status === 'Success') {
       if (location.pathname === '/me') location.assign('/login');
       else location.reload(true);
