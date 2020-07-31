@@ -6,6 +6,7 @@ const AppError = require('../utils/appError');
 
 const Email = require('../utils/email');
 const catchAsync = require('../utils/catchAsync');
+const swapToLocalhost = require('../utils/swapToLocalHost');
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -41,10 +42,6 @@ exports.logout = (req, res, next) => {
     httpOnly: true,
   });
   res.status(200).json({ status: 'Success' });
-};
-
-const swapToLocalhost = (url) => {
-  return url.replace(/127.0.0.1/, 'localhost');
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
