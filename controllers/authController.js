@@ -14,7 +14,7 @@ const signToken = (id) => {
   });
 };
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, req, res) => {
   //log the user in send jwt
   const token = signToken(user._id);
   const cookieOptions = {
@@ -22,9 +22,9 @@ const createSendToken = (user, statusCode, res) => {
       Date.now() + process.env.JWT_EXPIRES_IN * 24 * 60 * 60 * 1000
     ), //millisecond
     httpOnly: true,
+    secure: req.secure || req.headers('x-forwarded-proto') === 'https',
   };
 
-  if (process.env.NODE_ENV === 'prod') cookieOptions.secure = true;
   res.cookie('jwt', token, cookieOptions);
   //remove password from the output
   user.password = undefined;
@@ -61,7 +61,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   await new Email(newUser, url).sendWelcome();
 
-  createSendToken(newUser, 201, res);
+  createSendToken(newUser, 201, req, res);
 
   // const token = signToken(newUser._id);
 
@@ -89,7 +89,7 @@ exports.signin = catchAsync(async (req, res, next) => {
   }
 
   //3 if everything ok, send token to the client
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
   // const token = signToken(user._id);
   // res.status(200).json({
   //   status: 'Success',
@@ -249,7 +249,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // => in the mongodb middleware
 
   //log the user in, send jwt
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
   // const token = signToken(user._id);
 
   // res.status(200).json({
@@ -262,7 +262,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // get user from collection
   const user = await User.findById(req.user.id).select('+password');
 
-  console.log(user, req.body.passwordCurrent);
   if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
     return next(new AppError('User not found in the database', 404));
   }
@@ -274,7 +273,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   await user.save();
 
   //log the user in send jwt
-  createSendToken(user, 200, res);
+  createSendToken(user, 200, req, res);
   // const token = signToken(user._id);
   // res.status(200).json({
   //   status: 'success',
