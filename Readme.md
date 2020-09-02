@@ -3,7 +3,7 @@
 Project made during the [online course](https://www.udemy.com/course/nodejs-express-mongodb-bootcamp/) "Node.js, Express, MongoDB & More: The Complete Bootcamp 2020" on Udemy.
 
 <p align="center">
-  <img src="https://cloudinary.com/console/c-d840c9aa427be05e185404e5910c40/media_library/folders/home" alt="Image"/>
+  <img src="https://res.cloudinary.com/nicolef/image/upload/v1599041329/Natours-Backend_rdeaq9.png" alt="Image" width="2000" height=""1118/>
 </p>
 
 Available on heroku: [Natours backend](https://nlef-natours-backend.herokuapp.com/)
